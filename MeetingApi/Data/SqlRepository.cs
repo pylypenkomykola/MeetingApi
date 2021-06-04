@@ -64,16 +64,12 @@ namespace MeetingApi.Data
 
         public void SignForMeeting(UserSignUp _data)
         {
-            User _user = null;
+            User _user = context.Users.FirstOrDefault(elm => elm.Email == _data.email);
             Meeting _meeting = context.Meetings.FirstOrDefault(meeting => meeting.IdMeeting == _data.id_meeting);
 
-            if (context.Users.FirstOrDefault(elm => elm.Email == _data.email) == null)
+            if (_user == null)
             {
                 _user = context.Users.Add(new User() { FirstName = _data.firstname, Email = _data.email }).Entity;
-            }
-            else
-            {
-                _user = context.Users.FirstOrDefault(elm => elm.Email == _data.email);
             }
 
             if (context.UsersMeetings.Count(elm => elm.IdMeeting == _meeting.IdMeeting) >= _meeting.UsersLimit || context.UsersMeetings.Any(elm => elm.IdMeeting == _data.id_meeting && elm.IdUser == _user.IdUser))
