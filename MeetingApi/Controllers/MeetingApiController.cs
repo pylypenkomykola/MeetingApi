@@ -1,11 +1,8 @@
 ﻿using MeetingApi.Data;
-using MeetingApi.Entity;
+using MeetingApi.Dto;
 using MeetingApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MeetingApi.Controllers
 {
@@ -34,7 +31,7 @@ namespace MeetingApi.Controllers
         [HttpPost("create")]
         public ActionResult CreateMeeting()
         {
-            Meeting _result = null;
+            MeetingDto _result = null;
 
             _result = meetingRepository.CreateMeeting(25);
 
@@ -44,17 +41,31 @@ namespace MeetingApi.Controllers
         [HttpDelete("{meetingId}")]
         public ActionResult DeleteMeeting(int meetingId)
         {
-            meetingRepository.DeleteMeeting(meetingId);
+            ResponseDto _result = null;
 
-            return Ok();
+            _result = meetingRepository.DeleteMeeting(meetingId);
+
+            if (!_result.IsSuccess)
+            {
+                return NotFound(_result.ResponseText);
+            }
+
+            return Ok(_result.ResponseText);
         }
 
         [HttpPost("{meetingId}/sign-up")]
         public ActionResult SignUserForMeeting(int meetingId, [FromBody] UserSignUp _data)
         {
-            meetingRepository.SignForMeeting(meetingId, _data);
+            ResponseDto _result = null;
 
-            return Ok();
+            _result = meetingRepository.SignForMeeting(meetingId, _data);
+
+            if (!_result.IsSuccess)
+            {
+                return NotFound(_result.ResponseText);
+            }
+
+            return Ok(_result.ResponseText);
         }
     }
 }

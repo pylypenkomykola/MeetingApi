@@ -1,9 +1,5 @@
 ﻿using MeetingApi.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MeetingApi.Data
 {
@@ -27,7 +23,6 @@ namespace MeetingApi.Data
                 .Property(meeting => meeting.IdMeeting)
                 .UseIdentityAlwaysColumn()
                 .ValueGeneratedOnAdd();
-
         }
         
         public DbSet<Meeting> Meetings { get; set; }
