@@ -24,7 +24,6 @@ namespace MeetingApi.Data
         public Meeting CreateMeeting(int _userLimit)
         {
             Meeting _meeting = context.Meetings.Add(new Meeting() {UsersLimit = userLimit}).Entity;
-
             context.SaveChanges();
 
             return _meeting;
@@ -63,23 +62,19 @@ namespace MeetingApi.Data
             return _meetingsDto;
         }
 
-        public User GetUserByEmail(string _email)
-        {
-            return context.Users.Find(_email);
-        }
-
         public void SignForMeeting(UserSignUp _data)
         {
             User _user = null;
-            if (context.Users.First(elm => elm.Email == _data.email) == null)
+            Meeting _meeting = context.Meetings.FirstOrDefault(meeting => meeting.IdMeeting == _data.id_meeting);
+
+            if (context.Users.FirstOrDefault(elm => elm.Email == _data.email) == null)
             {
                 _user = context.Users.Add(new User() { FirstName = _data.firstname, Email = _data.email }).Entity;
             }
             else
             {
-                _user = context.Users.First(elm => elm.Email == _data.email);
+                _user = context.Users.FirstOrDefault(elm => elm.Email == _data.email);
             }
-            Meeting _meeting = context.Meetings.First(meeting => meeting.IdMeeting == _data.id_meeting);
 
             if (context.UsersMeetings.Count(elm => elm.IdMeeting == _meeting.IdMeeting) >= _meeting.UsersLimit || context.UsersMeetings.Any(elm => elm.IdMeeting == _data.id_meeting && elm.IdUser == _user.IdUser))
             {
@@ -87,7 +82,6 @@ namespace MeetingApi.Data
             }
 
             context.UsersMeetings.Add(new UserMeeting() { IdMeeting = _data.id_meeting, IdUser = _user.IdUser, Meeting = _meeting, User = _user});
-
             context.SaveChanges();
         }
     }
