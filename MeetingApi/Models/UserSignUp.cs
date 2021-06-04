@@ -9,6 +9,5 @@ namespace MeetingApi.Models
     { 
         public string firstname { get; set; }
         public string email { get; set; }
-        public int id_meeting { get; set; }
     }
 }

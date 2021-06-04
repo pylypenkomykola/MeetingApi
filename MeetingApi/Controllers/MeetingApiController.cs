@@ -49,10 +49,10 @@ namespace MeetingApi.Controllers
             return Ok();
         }
 
-        [HttpPost("sign-up")]
-        public ActionResult SignUserForMeeting([FromBody] UserSignUp _data)
+        [HttpPost("{meetingId}/sign-up")]
+        public ActionResult SignUserForMeeting(int meetingId, [FromBody] UserSignUp _data)
         {
-            meetingRepository.SignForMeeting(_data);
+            meetingRepository.SignForMeeting(meetingId, _data);
 
             return Ok();
         }

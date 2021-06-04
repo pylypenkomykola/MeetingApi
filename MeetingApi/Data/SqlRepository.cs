@@ -62,22 +62,22 @@ namespace MeetingApi.Data
             return _meetingsDto;
         }
 
-        public void SignForMeeting(UserSignUp _data)
+        public void SignForMeeting(int _meetingId, UserSignUp _data)
         {
             User _user = context.Users.FirstOrDefault(elm => elm.Email == _data.email);
-            Meeting _meeting = context.Meetings.FirstOrDefault(meeting => meeting.IdMeeting == _data.id_meeting);
+            Meeting _meeting = context.Meetings.FirstOrDefault(meeting => meeting.IdMeeting == _meetingId);
 
             if (_user == null)
             {
                 _user = context.Users.Add(new User() { FirstName = _data.firstname, Email = _data.email }).Entity;
             }
 
-            if (context.UsersMeetings.Count(elm => elm.IdMeeting == _meeting.IdMeeting) >= _meeting.UsersLimit || context.UsersMeetings.Any(elm => elm.IdMeeting == _data.id_meeting && elm.IdUser == _user.IdUser))
+            if (context.UsersMeetings.Count(elm => elm.IdMeeting == _meeting.IdMeeting) >= _meeting.UsersLimit || context.UsersMeetings.Any(elm => elm.IdMeeting == _meetingId && elm.IdUser == _user.IdUser))
             {
                 return;
             }
 
-            context.UsersMeetings.Add(new UserMeeting() { IdMeeting = _data.id_meeting, IdUser = _user.IdUser, Meeting = _meeting, User = _user});
+            context.UsersMeetings.Add(new UserMeeting() { IdMeeting = _meetingId, IdUser = _user.IdUser, Meeting = _meeting, User = _user});
             context.SaveChanges();
         }
     }
